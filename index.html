@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Udupi Grand | Experience Luxury in Udupi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide-react@0.292.0/dist/lucide-react.js"></script>
+    <style>
+        :root {
+            --gold-color: #c59d5f;
+            --dark-blue: #0a192f;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/0a192f/c59d5f?text=Welcome');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .btn-golden {
+            background-color: var(--gold-color);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(197, 157, 95, 0.3);
+        }
+
+        .btn-golden:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(197, 157, 95, 0.5);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--gold-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--gold-color);
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform:scale(0)}
+            to {transform:scale(1)}
+        }
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 45px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Watsonx Assistant Custom Styles */
+        /* Launcher Button Styling */
+        .WACLauncher__Button {
+            background-color: var(--gold-color) !important;
+            box-shadow: 0 4px 15px rgba(197, 157, 95, 0.4) !important;
+            transition: all 0.3s ease !important;
+            animation: pulse-launcher 2.5s infinite ease-in-out !important;
+        }
+
+        .WACLauncher__Button:hover {
+            transform: translateY(-3px) scale(1.05) !important;
+            box-shadow: 0 8px 25px rgba(197, 157, 95, 0.6) !important;
+        }
+
+        /* Launcher Pulsing Animation */
+        @keyframes pulse-launcher {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Chat Window Container Animation */
+        #WACContainer.WACContainer--is-open {
+            animation: slide-up-fade-in 0.5s ease-out forwards;
+        }
+
+        @keyframes slide-up-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat Window Header Styling */
+        .WAC__header {
+            background-color: var(--gold-color) !important;
+            color: white !important;
+        }
+
+        .WAC__header .WAC__title {
+            color: white !important;
+        }
+
+        /* Change header close button color */
+        .WAC__header .WAC__close-button svg {
+            fill: white !important;
+        }
+
+        /* User Message Bubble */
+        .WAC__message--from-user .WAC__message-bubble {
+            background-color: var(--dark-blue) !important;
+            color: white !important;
+        }
+
+        /* Bot Message Bubble */
+        .WAC__message--from-watson .WAC__message-bubble {
+            background-color: #f1f1f1 !important;
+            color: #333 !important;
+        }
+        
+        /* Input text area styling */
+        .WAC__input {
+            border-top: 2px solid var(--gold-color) !important;
+        }
+
+        .WAC__send-button svg {
+            fill: var(--gold-color) !important;
+        }
+    </style>
+    <script>
+        window.watsonAssistantChatOptions = {
+            integrationID: "b7dc9e57-e0ff-4344-8a88-0edd2c9812e2", // The ID of this integration.
+            region: "au-syd", // The region your integration is hosted in.
+            serviceInstanceID: "f1324bb0-8d1a-45d3-833a-3d77eb2eb046", // The ID of your service instance.
+            onLoad: async (instance) => { await instance.render(); }
+        };
+        setTimeout(function(){
+            const t=document.createElement('script');
+            t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+            document.head.appendChild(t);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-md transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-playfair font-bold text-gray-800">Hotel <span style="color: var(--gold-color);">Udupi Grand</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-gray-600 hover:text-gray-900 nav-link">Home</a>
+                <a href="#about" class="text-gray-600 hover:text-gray-900 nav-link">About Us</a>
+                <a href="#rooms" class="text-gray-600 hover:text-gray-900 nav-link">Rooms</a>
+                <a href="#gallery" class="text-gray-600 hover:text-gray-900 nav-link">Gallery</a>
+                <a href="#amenities" class="text-gray-600 hover:text-gray-900 nav-link">Amenities</a>
+                <a href="#booking" class="text-gray-600 hover:text-gray-900 nav-link">Contact</a>
+            </nav>
+            <a href="#booking-form" class="hidden md:inline-block px-6 py-2 rounded-full btn-golden font-semibold">Book Now</a>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+            <a href="#home" class="block text-gray-600 hover:text-gray-900">Home</a>
+            <a href="#about" class="block text-gray-600 hover:text-gray-900">About Us</a>
+            <a href="#rooms" class="block text-gray-600 hover:text-gray-900">Rooms</a>
+            <a href="#gallery" class="block text-gray-600 hover:text-gray-900">Gallery</a>
+            <a href="#amenities" class="block text-gray-600 hover:text-gray-900">Amenities</a>
+            <a href="#booking" class="block text-gray-600 hover:text-gray-900">Contact</a>
+            <a href="#booking-form" class="block mt-4 w-full text-center px-6 py-2 rounded-full btn-golden font-semibold">Book Now</a>
+        </div>
+    </header>
+
+    <section id="home" class="hero-section h-screen flex items-center justify-center text-white text-center">
+        <div class="container mx-auto px-6 fade-in">
+            <h1 class="text-5xl md:text-7xl font-playfair font-bold mb-4" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">Your Coastal Sanctuary</h1>
+            <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">Experience unparalleled luxury and warm hospitality in the heart of Udupi.</p>
+            <a href="#rooms" class="px-8 py-3 rounded-full btn-golden font-semibold text-lg">Explore Our Rooms</a>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <h2 class="text-4xl font-playfair font-bold mb-6 section-title">About Udupi Grand</h2>
+                    <p class="text-gray-600 mb-4">Nestled near the serene Malpe beach, Hotel Udupi Grand is an oasis of comfort and elegance. We pride ourselves on blending traditional Udupi hospitality with modern luxury to create an unforgettable experience for our guests.</p>
+                    <p class="text-gray-600 mb-6">From our meticulously designed rooms to our world-class dining, every detail is crafted for your comfort. Whether you're here for business, a pilgrimage, or a relaxing getaway, we are dedicated to making your stay exceptional.</p>
+                    <a href="#booking" class="px-6 py-2 rounded-full btn-golden font-semibold">Learn More</a>
+                </div>
+                <div class="fade-in">
+                    <img src="https://placehold.co/600x400/e2e8f0/334155?text=Lobby" alt="Hotel Lobby" class="rounded-lg shadow-2xl w-full h-auto object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="rooms" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-playfair font-bold mb-12 section-title">Our Rooms & Suites</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 fade-in">
+                    <img src="https://placehold.co/600x400/f0f9ff/0c4a6e?text=Deluxe+Room" alt="Deluxe Room" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-playfair font-bold mb-2">Deluxe Room</h3>
+                        <p class="text-gray-600 mb-4">Elegant and comfortable, perfect for solo travelers or couples.</p>
+                        <a href="#booking-form" class="font-semibold text-sm" style="color: var(--gold-color);">BOOK NOW →</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 fade-in">
+                    <img src="https://placehold.co/600x400/f1f5f9/1e293b?text=Executive+Suite" alt="Executive Suite" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-playfair font-bold mb-2">Executive Suite</h3>
+                        <p class="text-gray-600 mb-4">Spacious suite with a separate living area, ideal for business travelers.</p>
+                         <a href="#booking-form" class="font-semibold text-sm" style="color: var(--gold-color);">BOOK NOW →</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 fade-in">
+                    <img src="https://placehold.co/600x400/fff7ed/9a3412?text=Family+Suite" alt="Family Suite" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-playfair font-bold mb-2">Family Suite</h3>
+                        <p class="text-gray-600 mb-4">Comfort for the whole family with interconnected rooms and ample space.</p>
+                         <a href="#booking-form" class="font-semibold text-sm" style="color: var(--gold-color);">BOOK NOW →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-20 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-playfair font-bold mb-12 section-title">Glimpses of Grandeur</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid gap-4">
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x800/e0e7ff/3730a3?text=Poolside" alt=""></div>
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x600/fae8ff/5b21b6?text=Restaurant" alt=""></div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x600/fefce8/713f12?text=Spa" alt=""></div>
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x800/ecfdf5/065f46?text=Lounge" alt=""></div>
+                </div>
+                <div class="grid gap-4">
+                     <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x800/fdf2f8/831843?text=Suite+View" alt=""></div>
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x600/f0f9ff/0c4a6e?text=Deluxe+Room" alt=""></div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x600/fef2f2/991b1b?text=Dining" alt=""></div>
+                    <div class="fade-in"><img class="gallery-img h-auto max-w-full rounded-lg cursor-pointer" src="https://placehold.co/500x800/faf5ff/581c87?text=Entrance" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div id="galleryModal" class="modal">
+        <span class="modal-close">×</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <section id="amenities" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-playfair font-bold mb-12 section-title">Our Amenities</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center fade-in">
+                    <div class="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center bg-white shadow-lg" style="color: var(--gold-color);">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" x2="12.01" y1="20" y2="20"/></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold">Free Wi-Fi</h3>
+                </div>
+                 <div class="text-center fade-in">
+                    <div class="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center bg-white shadow-lg" style="color: var(--gold-color);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V6a4 4 0 0 0-4-4Z" /><path d="m14.5 13.5-2 2-2-2" /></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold">Swimming Pool</h3>
+                </div>
+                 <div class="text-center fade-in">
+                    <div class="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center bg-white shadow-lg" style="color: var(--gold-color);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18h.01"/><path d="M16 18h.01"/><path d="M8 18h.01"/></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold">Fine Dining</h3>
+                </div>
+                 <div class="text-center fade-in">
+                    <div class="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center bg-white shadow-lg" style="color: var(--gold-color);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13.5 13.5 4 4"/><path d="m21.5 21.5-4-4"/><path d="m4.5 4.5 4 4"/><path d="m11.5 11.5-4-4"/><path d="M18 12.5a4.5 4.5 0 1 1-6.36-6.36 4.5 4.5 0 0 1 6.36 6.36Z"/><path d="M12.5 18a4.5 4.5 0 1 1-6.36-6.36 4.5 4.5 0 0 1 6.36 6.36Z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold">Spa & Wellness</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div id="booking-form" class="bg-gray-100 p-8 rounded-lg shadow-lg fade-in">
+                    <h2 class="text-3xl font-playfair font-bold mb-6 text-center section-title">Make a Reservation</h2>
+                    <form id="reservationForm">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="checkin" class="block mb-2 font-semibold">Check-in</label>
+                                <input type="date" id="checkin" name="checkin" class="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none" required>
+                            </div>
+                            <div>
+                                <label for="checkout" class="block mb-2 font-semibold">Check-out</label>
+                                <input type="date" id="checkout" name="checkout" class="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none" required>
+                            </div>
+                        </div>
+                         <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="adults" class="block mb-2 font-semibold">Adults</label>
+                                <select id="adults" name="adults" class="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none">
+                                    <option>1</option>
+                                    <option selected>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="children" class="block mb-2 font-semibold">Children</label>
+                                <select id="children" name="children" class="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="room_type" class="block mb-2 font-semibold">Room Type</label>
+                             <select id="room_type" name="room_type" class="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 outline-none">
+                                 <option>Deluxe Room</option>
+                                 <option>Executive Suite</option>
+                                 <option>Family Suite</option>
+                             </select>
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-full btn-golden font-semibold text-lg">Check Availability</button>
+                        <p id="form-message" class="text-center mt-4"></p>
+                    </form>
+                </div>
+
+                <div class="fade-in">
+                    <h3 class="text-3xl font-playfair font-bold mb-6">Contact Us</h3>
+                    <p class="text-gray-600 mb-6">For any inquiries or special requests, please feel free to get in touch with us. Our team is available 24/7 to assist you.</p>
+                    <div class="space-y-4">
+                        <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3" style="color: var(--gold-color);"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Near Malpe Beach, Udupi, Karnataka, India</p>
+                        <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3" style="color: var(--gold-color);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 12345 67890</p>
+                        <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3" style="color: var(--gold-color);"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> reservations@udupigrand.com</p>
+                    </div>
+                    <div class="mt-8">
+                       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124119.34945532292!2d74.6853765972656!3d13.344485500000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbca28e7233777f%3A0x67341a4b52528757!2sUdupi%2C%20Karnataka%2C%20India!5e0!3m2!1sen!2sus!4v1725356910793!5m2!1sen!2sus" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-md"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+             <a href="#" class="text-2xl font-playfair font-bold">Hotel <span style="color: var(--gold-color);">Udupi Grand</span></a>
+             <p class="mt-4 mb-6 max-w-md mx-auto">Your perfect destination for comfort and luxury in the beautiful city of Udupi.</p>
+             <div class="flex justify-center space-x-6">
+                 <a href="#" class="hover:text-gray-400">Facebook</a>
+                 <a href="#" class="hover:text-gray-400">Instagram</a>
+                 <a href="#" class="hover:text-gray-400">Twitter</a>
+             </div>
+             <p class="mt-8 text-sm text-gray-500">© 2025 Hotel Udupi Grand. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Header shrink on scroll
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('py-2');
+                    header.classList.remove('py-4');
+                } else {
+                    header.classList.add('py-4');
+                    header.classList.remove('py-2');
+                }
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                     // Close mobile menu on link click
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Fade-in animation on scroll
+            const faders = document.querySelectorAll('.fade-in');
+            const appearOptions = {
+                threshold: 0.2,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('visible');
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+
+            // Set min date for checkin/checkout
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkin').setAttribute('min', today);
+            document.getElementById('checkout').setAttribute('min', today);
+            
+            // Gallery Modal Logic
+            const modal = document.getElementById("galleryModal");
+            const modalImg = document.getElementById("modalImage");
+            const galleryImages = document.querySelectorAll(".gallery-img");
+            const closeBtn = document.querySelector(".modal-close");
+
+            galleryImages.forEach(img => {
+                img.onclick = function(){
+                    modal.style.display = "flex";
+                    modalImg.src = this.src;
+                }
+            });
+
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            // Booking form submission
+            const reservationForm = document.getElementById('reservationForm');
+            const formMessage = document.getElementById('form-message');
+            reservationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                formMessage.textContent = 'Checking availability...';
+                formMessage.style.color = 'blue';
+
+                setTimeout(() => {
+                    // This is a mock success message. In a real application, you would
+                    // make an API call to your booking system here.
+                    formMessage.textContent = 'Thank you! Your booking request has been received. We will contact you shortly.';
+                    formMessage.style.color = 'green';
+                    reservationForm.reset();
+                    // Reset min dates after form reset
+                    document.getElementById('checkin').setAttribute('min', today);
+                    document.getElementById('checkout').setAttribute('min', today);
+                }, 2000);
+            });
+
+        });
+    </script>
+</body>
+
+</html>
